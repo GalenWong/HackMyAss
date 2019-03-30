@@ -35,11 +35,11 @@ const fetchCheck = (userinfo, ...args) => {
     }
     /* check body */
     if (isString(body)) {
-        const leaked = matchAll(user, body);
+        const leaked = matchAll(userinfo, body);
         allLeaks = {...allLeaks, ...leaked};
     } else if (body instanceof Object) {
         const marshalled = JSON.stringify(body);
-        const leaked = matchAll(user, marshalled);
+        const leaked = matchAll(userinfo, marshalled);
         allLeaks = {...allLeaks, ...leaked};
     }
 

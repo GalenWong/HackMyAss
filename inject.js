@@ -7,7 +7,6 @@ const matchAll = (userinfo, string) => {
         if (! isString(userinfo[key])) continue;
         const toMatch = userinfo[key];
         if (toMatch.length < 1) continue;
-        console.log(string, toMatch);
         if (string.indexOf(toMatch) != -1) {
             result[key] = toMatch;
         }
@@ -46,7 +45,7 @@ const fetchCheck = (userinfo, ...args) => {
     const leakedKeys = Object.keys(allLeaks);
     if (leakedKeys.length === 0) return;
     
-    let warning = 'The website tries to send the following data to server:';
+    let warning = 'The website tries to send the following data to server:\n';
     for (let k of leakedKeys) {
         warning += `${k}: ${allLeaks[k]}\n`;
     }
@@ -55,21 +54,28 @@ const fetchCheck = (userinfo, ...args) => {
     throw "User consent not given";
 };
 
-(function(){
-    
-/* Script init check */
-console.log('HackMyAss is running');
-const oldfetch = window.fetch;
-const newfetch = async (...args) => {
-    fetchCheck({
-        "username": "GalenWong",
-    }, ...args);
-    return oldfetch(...args);
+function replaceFetch() {
+    const oldfetch = window.fetch;
+    const newfetch = async (...args) => {
+        fetchCheck({
+            "username": "GalenWong",
+        }, ...args);
+        return oldfetch(...args);
+    }
+
+    window.fetch = newfetch;
+    console.log('fetch has been replaced');
+    console.log(window.fetch);
 }
 
-window.fetch = newfetch;
-console.log('fetch has been replaced');
-console.log(window.fetch);
+function replaceXML() {
+    const oldsend = window.XMLHttpRequest.send;
+}
+
+(function(){
+    /* Script init check */
+    console.log('HackMyAss is running');
+    replaceFetch();
 
 })();
 

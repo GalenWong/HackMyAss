@@ -57,6 +57,8 @@ const fetchCheck = (userinfo, ...args) => {
 
 (function(){
     
+/* Script init check */
+console.log('HackMyAss is running');
 const oldfetch = window.fetch;
 const newfetch = async (...args) => {
     fetchCheck({
@@ -66,6 +68,8 @@ const newfetch = async (...args) => {
 }
 
 window.fetch = newfetch;
+console.log('fetch has been replaced');
+console.log(window.fetch);
 
 })();
 

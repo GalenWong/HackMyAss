@@ -18,7 +18,6 @@ const matchAll = (userinfo, string) => {
 const fetchCheck = (userinfo, ...args) => {
     const URL = args[0];
     const { headers, body } = args[1]?args[1]:{};
-
     let allLeaks = new Object;
     /* check URL */
     if (isString(URL)) {
@@ -29,8 +28,15 @@ const fetchCheck = (userinfo, ...args) => {
     /* check headers */
     if (headers instanceof Headers) {
         for(let h of headers) {
+            const leaked = matchAll(userinfo, h[1]);
+            allLeaks = {...allLeaks, ...leaked};
+        }
+    }
+    else if(headers instanceof Object) {
+        const vals = Object.values(headers);
+        for(let h of vals) {
             const leaked = matchAll(userinfo, h);
-            allLeaks = {...allLeaks, ...leaked}
+            allLeaks = {...allLeaks, ...leaked};
         }
     }
     /* check body */

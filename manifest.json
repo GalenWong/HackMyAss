@@ -7,8 +7,9 @@
         "persistent": true
     },
     "permissions": [
-        "activeTab"
+        "activeTab","storage"
     ],
+    "options_page": "options.html",
     "content_scripts": [
     {
      "matches": ["http://*/*", "https://*/*"],

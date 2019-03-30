@@ -1,0 +1,20 @@
+  {
+    "name": "test plugin",
+    "version": "1.0",
+    "description": "testing injection",
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "permissions": [
+        "activeTab"
+    ],
+    "content_scripts": [
+    {
+     "matches": ["http://*/*", "https://*/*"],
+     "js": ["background.js"]
+    }
+    ],
+    "web_accessible_resources": ["inject.js"],
+    "manifest_version": 2
+  }

@@ -7,8 +7,13 @@
         "persistent": true
     },
     "permissions": [
-        "activeTab"
+        "activeTab",
+        "storage",
+        "declarativeContent"
     ],
+    "page_action": {
+      "default_popup": "popup.html"
+    },
     "content_scripts": [
     {
      "matches": ["http://*/*", "https://*/*"],

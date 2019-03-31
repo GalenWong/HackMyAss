@@ -46,6 +46,34 @@ class WhiteList extends React.Component {
         }
         columns[1].render = this.boolRender(columns[1].key);
         columns[2].render = this.deleteRowRender;
+        try {
+            chrome.storage.sync.get(['whitelist'], (result) => {
+                if (result['whitelist'] instanceof Array) {
+                    this.setState({
+                        data: [...result['whitelist']],
+                    });
+                }
+            })
+        } catch (e) {
+            console.log('failed fetch');
+            console.error(e);
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { data } = this.state;
+        console.log('data', data);
+        console.log('prev data', prevState.data);
+        if (! isEqual(prevState.data, data)) {
+            try {
+                chrome.storage.sync.set({ whitelist: data }, () => {
+                    console.log('updates', data);
+                });
+            } catch (e) {
+                console.log('failed');
+                console.error(e);
+            }
+        }
     }
 
     boolRender = columnKey => {
@@ -54,7 +82,9 @@ class WhiteList extends React.Component {
                 const { data } = this.state;
                 const newdata = data.map(v => {
                     if (v.key === record.key) {
-                        v[columnKey] = e.target.checked; 
+                        const r = {...v};
+                        r[columnKey] = e.target.checked;
+                        return r; 
                     }
                     return v;
                 })

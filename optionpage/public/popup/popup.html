@@ -56,23 +56,25 @@ input:checked + .slider:before {
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 34px;
+  border-radius: 30px;
 }
 
 .slider.round:before {
   border-radius: 50%;
 }
 </style>
-<script src="popup.js">
-</script>
+
 </head>
 <body>
 
-<h2>Activate</h2>
+<h2>Check?</h2>
 
 <label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
+  <input type="checkbox" checked name="checkbox">
+ <span class="slider round"></span>
+ <!--<button id="myButton">Check Checkbox</button>-->
+ <script src="popup.js"></script> 
 </label>
 </body>
-</html> 
+</html>
+

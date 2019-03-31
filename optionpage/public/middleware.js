@@ -2,12 +2,12 @@
 const isString = (s) => s instanceof String || typeof s === 'string';
 
 const matchAll = (userinfo, string) => {
-    const result = new Object;
+    const result = new Object();
     for (let key in userinfo) {
         if (! isString(userinfo[key])) continue;
         const toMatch = userinfo[key];
         if (toMatch.length < 1) continue;
-        if (string.indexOf(toMatch) != -1) {
+        if (string.indexOf(toMatch) !== -1) {
             result[key] = toMatch;
         }
     }
@@ -29,14 +29,14 @@ const generateLeakReport = leaked => {
         warning += `${k}: ${leaked[k]}\n`;
     }
     warning += 'Give Permission?'
-    if (confirm(warning)) return; // given consent
+    if (window.confirm(warning)) return; // given consent
     throw "User consent not given";
 }
 
 const fetchCheck = (userinfo, ...args) => {
     const URL = args[0];
     const { headers, body } = args[1]?args[1]:{};
-    let allLeaks = new Object;
+    let allLeaks = new Object();
     /* check URL */
     if (isString(URL)) {
         const leaked = matchAll(userinfo, URL);

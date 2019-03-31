@@ -15,13 +15,16 @@
     }
     ],
     "web_accessible_resources": ["middleware.js"],
-    "content_security_policy": "script-src 'self' 'sha256-NiiO1vKelrAGQujr9B/VkWNdb6oXfnnMP8mje922vZc=' object-src 'self'",
+    "content_security_policy": "script-src 'self' 'sha256-NiiO1vKelrAGQujr9B/VkWNdb6oXfnnMP8mje922vZc='; object-src 'self'",
     "background": {
       "scripts": ["popup/injection.js"],
       "persistent": false
     },
     "page_action": {
       "default_popup": "popup/popup.html"
+    },
+    "icons": {
+      "128": "shield128.png"
     },
     "manifest_version": 2
   }

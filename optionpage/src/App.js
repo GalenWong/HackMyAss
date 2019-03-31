@@ -11,8 +11,7 @@ const userInfoKey = 'userinfo';
 class App extends Component {
   constructor(props) {
     super(props);
-    // TODO: change back, don't commit
-    this.state = { current: userInfoKey };
+    this.state = { current: whiteListKey };
   }
 
   changeTab = (e) => {

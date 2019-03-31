@@ -9,15 +9,15 @@ const columns = [
     {
       width: 5,
       title: "URL",
-      dataIndex: "URL",
-      key: "URL",
+      dataIndex: "url",
+      key: "url",
       render: text => <a href="javascript:;">{text}</a>
     },
     {
         width: 5,
         title: "Enabled",
-        dataIndex: "Enabled",
-        key: "Enabled",
+        dataIndex: "enabled",
+        key: "enabled",
     },
     {
         width: 5,
@@ -27,25 +27,22 @@ const columns = [
     }
   ];
   
-  const tempData = [
+  /*const tempData = [
     {
-      key: "1",
-      URL: "https://www.google.com",
-      Enabled: true
+      url: "https://www.google.com",
+      enabled: true
     },
     {
-      key: "2",
-      URL: "https://www.espncricinfo.com",
-      Enabled: true
+      url: "https://www.espncricinfo.com",
+      enabled: true
     }
-  ];
+  ];*/
 
 class WhiteList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            keynum: 3,
-            data: [...tempData]
+            data: []
         }
         columns[1].render = this.boolRender(columns[1].key);
         columns[2].render = this.deleteRowRender;
@@ -84,7 +81,7 @@ class WhiteList extends React.Component {
             const updateBool = (e) => {
                 const { data } = this.state;
                 const newdata = data.map(v => {
-                    if (v.key === record.key) {
+                    if (v.url === record.url) {
                         const r = {...v};
                         r[columnKey] = e.target.checked;
                         return r; 
@@ -100,7 +97,7 @@ class WhiteList extends React.Component {
     deleteRowRender = (text, record) => {
         const deleteRow = () => {
             const { data } = this.state;
-            const newdata = data.filter(v => v.key !== record.key);
+            const newdata = data.filter(v => v.url !== record.url);
             this.setState({ data: newdata });
         }
         return <Icon 
@@ -123,7 +120,7 @@ class WhiteList extends React.Component {
                 }
                 else {
                     for(let i of this.state.data) {
-                        eq = value === i.URL
+                        eq = value === i.url
                         if(eq)
                         {
                             window.alert("URL already exists!");
@@ -132,12 +129,10 @@ class WhiteList extends React.Component {
                     }
                     if(! eq || this.state.data.length<1 || this.state.data === undefined) {
                         let added = {
-                            key: String(this.state.keynum),
-                            URL: value,
-                            Enabled: true
+                            url: value,
+                            enabled: true
                         }
                         let newState = {
-                            keynum: this.state.keynum+1,
                             data: [...this.state.data,added],
                         }
                         this.setState(newState);

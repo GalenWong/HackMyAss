@@ -1,6 +1,9 @@
+
+/* global chrome */
 import React from 'react';
 import "antd/dist/antd.css";
 import { Table, Input, Icon, Checkbox } from "antd";
+import {isEqual} from 'lodash';
 
 const columns = [
     {

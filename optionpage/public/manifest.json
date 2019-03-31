@@ -1,0 +1,18 @@
+  {
+    "name": "test plugin",
+    "version": "1.0",
+    "description": "testing injection",
+    "permissions": [
+        "activeTab","storage"
+    ],
+    "options_page": "index.html",
+    "content_scripts": [
+    {
+     "matches": ["http://*/*", "https://*/*"],
+     "js": ["background.js"]
+    }
+    ],
+    "web_accessible_resources": ["inject.js"],
+    "content_security_policy": "script-src 'self' 'sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU=' object-src 'self'",
+    "manifest_version": 2
+  }

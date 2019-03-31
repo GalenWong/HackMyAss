@@ -11,7 +11,8 @@ const userInfoKey = 'userinfo';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { current: whiteListKey };
+    // TODO: change back, don't commit
+    this.state = { current: userInfoKey };
   }
 
   changeTab = (e) => {
@@ -58,7 +59,7 @@ class App extends Component {
             </Menu.Item>
           </Menu>
         </Header>
-        <Content>
+        <Content style={{ background: 'white' }}>
           {content}
         </Content>
 

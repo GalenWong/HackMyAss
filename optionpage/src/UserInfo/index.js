@@ -2,7 +2,7 @@
 /* global chrome */
 import React from 'react';
 import { Table, Checkbox, Typography, Input, Radio, Button, Icon } from 'antd';
-import { changeConfirmLocale } from 'antd/lib/modal/locale';
+import { isEqual } from 'lodash';
 
 const { Text } = Typography;
 
@@ -65,7 +65,34 @@ class UserInfo extends React.Component {
         columns[2].render = this.boolRender(columns[2].key);
         columns[3].render = this.boolRender(columns[3].key);
         columns[4].render = this.deleteRowRender;
-        this.overwriteSetState();
+        try {
+            chrome.storage.sync.get(['userinfo'], (result) => {
+                if (result['userinfo'] instanceof Array) {
+                    this.setState({
+                        data: [...result['userinfo']],
+                    });
+                }
+            })
+        } catch (e) {
+            console.log('failed fetch');
+            console.error(e);
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { data } = this.state;
+        console.log('data', data);
+        console.log('prev data', prevState.data);
+        if (! isEqual(prevState.data, data)) {
+            try {
+                chrome.storage.sync.set({ userinfo: data }, () => {
+                    console.log('updates', data);
+                });
+            } catch (e) {
+                console.log('failed');
+                console.error(e);
+            }
+        }
     }
 
     boolRender = columnKey => {
@@ -74,7 +101,9 @@ class UserInfo extends React.Component {
                 const { data } = this.state;
                 const newdata = data.map(v => {
                     if (v.key === record.key) {
-                        v[columnKey] = e.target.checked; 
+                        const r = { ...v };
+                        r[columnKey] = e.target.checked;
+                        return r;
                     }
                     return v;
                 })
@@ -157,4 +186,5 @@ class UserInfo extends React.Component {
         );
     }
 }
+
 export default UserInfo;

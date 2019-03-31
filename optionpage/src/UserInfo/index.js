@@ -41,12 +41,12 @@ const columns = [
 ];
 
 const tempData = [
-    {
-        key: 'Username',
-        val: 'GalenWong',
-        sensitive: false,
-        enabled: true,
-    }
+    // {
+    //     key: 'Username',
+    //     val: 'GalenWong',
+    //     sensitive: false,
+    //     enabled: true,
+    // }
 ];
 
 const emptyCurrent = {
@@ -109,6 +109,7 @@ class UserInfo extends React.Component {
                 })
                 this.setState({ data: newdata });
             }
+            console.log(text, record);
             return <Checkbox defaultChecked={text} onChange={updateBool} />
         }
     }

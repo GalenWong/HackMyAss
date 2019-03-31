@@ -1,14 +1,36 @@
 
+let userInfo = [
+    {
+        key: 'username',
+        val: 'GalenWong',
+        sensitive: true,
+        enabled: true,
+    },
+    {
+        key: 'email',
+        val: 'wonggalen1999@gmail.com',
+        sensitive: false,
+        enabled: true,
+    }
+];
+let whiteList = [
+    {
+        url: 'http://www.google.com',
+        enabled: true,
+    }
+];
+
 const isString = (s) => s instanceof String || typeof s === 'string';
 
 const matchAll = (userinfo, string) => {
     const result = new Object();
-    for (let key in userinfo) {
-        if (! isString(userinfo[key])) continue;
-        const toMatch = userinfo[key];
+    for (let info of userinfo) {
+        if (! info.enabled) continue;
+        if (! isString(info.val)) continue;
+        const toMatch = info.val;
         if (toMatch.length < 1) continue;
         if (string.indexOf(toMatch) !== -1) {
-            result[key] = toMatch;
+            result[info.key] = { val: toMatch, sensitive: info.sensitive };
         }
     }
     return result;
@@ -26,7 +48,10 @@ const generateLeakReport = leaked => {
     
     let warning = 'The website tries to send the following data to server:\n';
     for (let k of leakedKeys) {
-        warning += `${k}: ${leaked[k]}\n`;
+        if (leaked[k].sensitive)
+            warning += `${k}: ****\n`;
+        else
+            warning += `${k}: ${leaked[k].val}\n`;
     }
     warning += 'Give Permission?'
     if (window.confirm(warning)) return; // given consent
@@ -89,15 +114,10 @@ const XMLOpenCheck = (userinfo, URL) => {
     }
 }
 
-// TODO: remove this
-const tempUserInfo = {
-    "username": "GalenWong",
-};
-
 function replaceFetch() {
     const oldfetch = window.fetch;
     const newfetch = async (...args) => {
-        fetchCheck(tempUserInfo, ...args);
+        fetchCheck(userInfo, ...args);
         return oldfetch.call(this, ...args);
     }
 
@@ -109,7 +129,7 @@ function replaceFetch() {
 function replaceXML() {
     const oldsend = window.XMLHttpRequest.prototype.send;
     async function newsend (body) {
-        XMLSendCheck(tempUserInfo, body);
+        XMLSendCheck(userInfo, body);
         return oldsend.call(this, body);
     }
     window.XMLHttpRequest.prototype.send = newsend;
@@ -124,9 +144,34 @@ function replaceXML() {
     console.log('XMLHttpRequest.open replaced')
 }
 
+const getDomain = url => {
+    let tmp = document.createElement('a');
+    tmp.href = url;
+    return tmp.hostname;
+}
 (function(){
     /* Script init check */
     console.log('HackMyAss is running');
+
+    const url = window.location.href;
+    const currDomian = getDomain(url);
+    const whiteListed = whiteList.some(v => v.enabled && getDomain(v.url) === currDomian); 
+    if (whiteListed) return;
+
+    window.addEventListener('message', (event) => {
+        if (event.source !== window) return;
+
+        switch(event.data.type) {
+        case 'whiteList':
+            whiteList = event.data.params.whiteList;
+            break;
+        case 'userInfo':
+            userInfo = event.data.params.userInfo;
+            break;
+        default:
+        }
+    })
+
     replaceFetch();
     replaceXML();
 

@@ -137,7 +137,7 @@ function replaceXML() {
 
     const oldopen = window.XMLHttpRequest.prototype.open;
     async function newopen (method, URL, ...args) {
-        XMLOpenCheck(tempUserInfo, URL);
+        XMLOpenCheck(userInfo, URL);
         return oldopen.call(this, method, URL, ...args);
     }
     window.XMLHttpRequest.prototype.open = newopen;

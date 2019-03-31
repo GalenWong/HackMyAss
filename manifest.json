@@ -7,7 +7,7 @@
         "persistent": true
     },
     "permissions": [
-        "activeTab","storage"
+        "activeTab","storage", "declarativeContent"
     ],
     "options_page": "options.html",
     "content_scripts": [

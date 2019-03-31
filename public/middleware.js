@@ -155,8 +155,6 @@ const getDomain = url => {
 
     const url = window.location.href;
     const currDomian = getDomain(url);
-    const whiteListed = whiteList.some(v => v.enabled && getDomain(v.url) === currDomian); 
-    if (whiteListed) return;
 
     window.addEventListener('message', (event) => {
         if (event.source !== window) return;
@@ -172,6 +170,11 @@ const getDomain = url => {
         }
     })
 
+    const whiteListed = whiteList.some(v => {
+        console.log(getDomain(v.url), currDomian);
+        return v.enabled && getDomain(v.url) === currDomian
+    }); 
+    if (whiteListed) return;
     replaceFetch();
     replaceXML();
 

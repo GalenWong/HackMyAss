@@ -36,8 +36,9 @@ const getDomain = url => {
         console.log(button);
         button.onclick = (e) => {
             chrome.storage.sync.get(['whitelist'], (result) => {
-                const { whitelist } = result;
-                if (! whitelist instanceof Array) return;
+                let { whitelist } = result;
+                if (! whitelist instanceof Array) whitelist = [];
+                if (!whitelist) whitelist = [];
                 const newlist = whitelist.map(v => {
                     if (getDomain(v.url) === currDomain){
                         const r = { ...v };
@@ -47,6 +48,7 @@ const getDomain = url => {
                     return v;
                 });
                 const existed = whitelist.some(v => getDomain(v.url) === currDomain);
+                console.log(existed);
                 if (! existed) newlist.push({url: `http://${currDomain}`, enabled: true});
                 
                 chrome.storage.sync.set({whitelist: newlist}, () => {
@@ -58,6 +60,8 @@ const getDomain = url => {
             //console.log(result.whitelist);
             const list = result['whitelist'];
             console.log(currDomain);
+            if (! list instanceof Array) return;
+            if (!list) return;
             const contention = list.filter((e) => getDomain(e.url) === currDomain && e.enabled);
             if (contention.length >=1) {
                 console.log(currLink + " already exists in whitelist; Button disabled");
